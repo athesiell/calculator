@@ -2,8 +2,16 @@ const display = document.querySelector('.display');
 const numberButtons = document.querySelectorAll('.number')
 const operatorButtons = document.querySelectorAll('.operator')
 const equalsButton = document.querySelector('.equals');
+const deleteBtn = document.querySelector('.delete')
 const p = document.createElement('p')
 let displayValue = ""
+
+function updateDisplay() {
+    p.innerText = displayValue;
+    display.value = displayValue;
+    display.appendChild(p);
+}
+
 
 function makeAddition (a,b) {
     let sum = parseInt(a) + parseInt (b)
@@ -49,9 +57,11 @@ function operate(operator, num1, num2) {
 }
 
 function clearDisplay () {
-    p.innerText = displayValue = "";
-    display.value = displayValue
-    display.appendChild(p)
+    displayValue = '';
+    firstNumber = '';
+    currentOperator = '';
+    secondNumber = '';
+    updateDisplay();
 }
 
 
@@ -62,9 +72,9 @@ function clearDisplay () {
 
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
-        p.innerText = displayValue += button.textContent;
-        display.value = displayValue;
-        display.appendChild(p)
+        if (displayValue.length <= 9)
+        displayValue += button.textContent;
+        updateDisplay()
     });
 })
 
@@ -83,13 +93,14 @@ document.querySelector('.clear').addEventListener('click', clearDisplay)
 equalsButton.addEventListener('click', () => {
     if (firstNumber !== '' && currentOperator !== '' && displayValue !== '') {
         secondNumber = displayValue;
-        
-        // Perform the calculation based on the operator
         operate(currentOperator, parseFloat(firstNumber), parseFloat(secondNumber));
-        
-        // Reset values for future calculations
         firstNumber = '';
         currentOperator = '';
         displayValue = '';
     }
 });
+
+deleteBtn.addEventListener('click', () => {
+    displayValue = displayValue.slice(0, -1);
+    updateDisplay()
+})
