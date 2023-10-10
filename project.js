@@ -1,4 +1,7 @@
 const display = document.querySelector('.display');
+const numberButtons = document.querySelectorAll('.number')
+const operatorButtons = document.querySelectorAll('.operator')
+const equalsButton = document.querySelector('.equals');
 const p = document.createElement('p')
 let displayValue = ""
 
@@ -27,15 +30,11 @@ function makeDivision(a, b) {
     display.appendChild(p)
 }
 
-let firstNumber = 0;
+let firstNumber = "";
 let currentOperator = "";
-let secondNumber = 0;
+let secondNumber = "";
 
-function getResult(num1, op, num2) {
-    firstNumber = num1;
-    currentOperator = op;
-    secondNumber = num2
-}
+
 
 function operate(operator, num1, num2) {
     if (operator === "+") {
@@ -49,64 +48,48 @@ function operate(operator, num1, num2) {
     }
 }
 
-function appendNumber(number) {
-    p.innerText = displayValue += number;
-    p.innerText = display.value = displayValue;
-    display.appendChild(p)
-}
-
-function appendOperator(operator) {
-    p.innerText = displayValue = " " +operator+ " ";
-    p.innerText = display.value = displayValue;
-    display.appendChild(p)
-}
-
 function clearDisplay () {
     p.innerText = displayValue = "";
     display.value = displayValue
     display.appendChild(p)
 }
 
-document.querySelector('#one').addEventListener('click', () => {
-    appendNumber(1)
+
+
+
+
+//Event listeners
+
+numberButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        p.innerText = displayValue += button.textContent;
+        display.value = displayValue;
+        display.appendChild(p)
+    });
 })
-document.querySelector('#two').addEventListener('click', () => {
-    appendNumber(2)
-})
-document.querySelector('#three').addEventListener('click', () => {
-    appendNumber(3)
-})
-document.querySelector('#four').addEventListener('click', () => {
-    appendNumber(4)
-})
-document.querySelector('#five').addEventListener('click', () => {
-    appendNumber(5)
-})
-document.querySelector('#six').addEventListener('click', () => {
-    appendNumber(6)
-})
-document.querySelector('#seven').addEventListener('click', () => {
-    appendNumber(7)
-})
-document.querySelector('#eight').addEventListener('click', () => {
-    appendNumber(8)
-})
-document.querySelector('#nine').addEventListener('click', () => {
-    appendNumber(9)
-})
-document.querySelector('#zero').addEventListener('click', () => {
-    appendNumber(0)
-})
-document.querySelector('.add').addEventListener('click', () => {
-    appendOperator('+')
-})
-document.querySelector('.sub').addEventListener('click', () => {
-    appendOperator('-')
-})
-document.querySelector('.division').addEventListener('click', () => {
-    appendOperator('/')
-})
-document.querySelector('.multiply').addEventListener('click', () => {
-    appendOperator('*')
-})
+
+operatorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        if (firstNumber === '') {
+            firstNumber = displayValue;
+            currentOperator = button.textContent;
+            displayValue = '';
+        }
+    });
+});
+
 document.querySelector('.clear').addEventListener('click', clearDisplay)
+
+equalsButton.addEventListener('click', () => {
+    if (firstNumber !== '' && currentOperator !== '' && displayValue !== '') {
+        secondNumber = displayValue;
+        
+        // Perform the calculation based on the operator
+        operate(currentOperator, parseFloat(firstNumber), parseFloat(secondNumber));
+        
+        // Reset values for future calculations
+        firstNumber = '';
+        currentOperator = '';
+        displayValue = '';
+    }
+});
