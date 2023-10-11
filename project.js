@@ -4,71 +4,65 @@ const operatorButtons = document.querySelectorAll('.operator')
 const equalsButton = document.querySelector('.equals');
 const deleteBtn = document.querySelector('.delete')
 const dotBtn = document.querySelector('.dot')
-const p = document.createElement('p')
-let displayValue = ""
+let displayValue = "";
 let firstNumber = "";
 let currentOperator = "";
 let secondNumber = "";
 
 
 
+
 function updateDisplay() {
-    p.innerText = displayValue;
-    display.value = displayValue;
-    display.appendChild(p);
+    display.innerText = displayValue;
 }
 
+//Functions for basic math
 
 function makeAddition (a,b) {
-    let sum = parseInt(a) + parseInt (b)
-    p.innerText = sum
-    display.appendChild(p)
+    displayValue = (parseFloat(a) + parseFloat(b)).toString();
 }
 
 function makeSubtraction (a, b) {
-    p.innerText = a - b
-    display.appendChild(p)
+    displayValue = (parseFloat(a) - parseFloat(b)).toString();
 }
 
 function makeMultiply (a, b) {
-    p.innerText = a * b
-    display.appendChild(p)
+    displayValue = (parseFloat(a) * parseFloat(b)).toString();
 }
 
+// In order to not get "Infinity", I needed to create variables with parseFloat values
 function makeDivision(a, b) {
-    if (b === 0) {
-    p.innerText = "Error: Division by zero";
+    const parsedA = parseFloat(a);
+    const parsedB = parseFloat(b);
+    if (parsedB === 0) {
+        displayValue = "Do not do that";
     } else {
-    p.innerText = a / b;
-}
-    display.appendChild(p)
+        displayValue = (parsedA / parsedB).toString();
+    }
 }
 
-
+// Function for calculation
 
 function operate(operator, num1, num2) {
     if (operator === "+") {
-      return  makeAddition(num1, num2)
+        makeAddition(num1, num2)
     } else if (operator === "*") {
-        return makeMultiply(num1, num2)
+         makeMultiply(num1, num2)
     } else if (operator === "-") {
-        return makeSubtraction (num1, num2) 
+         makeSubtraction (num1, num2) 
     } else if (operator === "/") {
-        return makeDivision (num1, num2)
+         makeDivision (num1, num2)
     }
     updateDisplay()
 }
 
-function clearDisplay () {
+function clearDisplay() {
     displayValue = '';
     firstNumber = '';
     currentOperator = '';
     secondNumber = '';
     updateDisplay();
 }
-
-
-
 
 
 //Event listeners
@@ -87,19 +81,24 @@ operatorButtons.forEach(button => {
             firstNumber = displayValue;
             currentOperator = button.textContent;
             displayValue = '';
-        } 
+        } else {
+            secondNumber = displayValue
+            operate(currentOperator, firstNumber, secondNumber);
+            firstNumber = displayValue;
+            currentOperator = button.textContent;
+            displayValue = '';
+        }
     });
 });
 
-document.querySelector('.clear').addEventListener('click', clearDisplay)
+document.querySelector('.clear').addEventListener('click', clearDisplay) // clears everything
 
 equalsButton.addEventListener('click', () => {
     if (firstNumber !== '' && currentOperator !== '' && displayValue !== '') {
         secondNumber = displayValue;
         operate(currentOperator, firstNumber, secondNumber);
-        firstNumber = '';
+        firstNumber = displayValue
         currentOperator = '';
-        displayValue = '';
     }
 });
 
@@ -107,3 +106,10 @@ deleteBtn.addEventListener('click', () => {
     displayValue = displayValue.slice(0, -1);
     updateDisplay()
 })
+
+dotBtn.addEventListener('click', () => {
+    if (!displayValue.includes('.')) {
+        displayValue += '.';
+        updateDisplay();
+    }
+});
