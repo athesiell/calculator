@@ -3,8 +3,14 @@ const numberButtons = document.querySelectorAll('.number')
 const operatorButtons = document.querySelectorAll('.operator')
 const equalsButton = document.querySelector('.equals');
 const deleteBtn = document.querySelector('.delete')
+const dotBtn = document.querySelector('.dot')
 const p = document.createElement('p')
 let displayValue = ""
+let firstNumber = "";
+let currentOperator = "";
+let secondNumber = "";
+
+
 
 function updateDisplay() {
     p.innerText = displayValue;
@@ -38,10 +44,6 @@ function makeDivision(a, b) {
     display.appendChild(p)
 }
 
-let firstNumber = "";
-let currentOperator = "";
-let secondNumber = "";
-
 
 
 function operate(operator, num1, num2) {
@@ -54,6 +56,7 @@ function operate(operator, num1, num2) {
     } else if (operator === "/") {
         return makeDivision (num1, num2)
     }
+    updateDisplay()
 }
 
 function clearDisplay () {
@@ -84,7 +87,7 @@ operatorButtons.forEach(button => {
             firstNumber = displayValue;
             currentOperator = button.textContent;
             displayValue = '';
-        }
+        } 
     });
 });
 
@@ -93,7 +96,7 @@ document.querySelector('.clear').addEventListener('click', clearDisplay)
 equalsButton.addEventListener('click', () => {
     if (firstNumber !== '' && currentOperator !== '' && displayValue !== '') {
         secondNumber = displayValue;
-        operate(currentOperator, parseFloat(firstNumber), parseFloat(secondNumber));
+        operate(currentOperator, firstNumber, secondNumber);
         firstNumber = '';
         currentOperator = '';
         displayValue = '';
