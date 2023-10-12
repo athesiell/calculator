@@ -67,6 +67,12 @@ function clearDisplay() {
 
 //Event listeners
 
+window.addEventListener('keydown', (e) => {
+    const key = document.querySelector(`button[data-key="${e.keyCode}"], button[data-key-numpad="${e.keyCode}"]`)
+    key.click()
+    
+})
+
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
         if (displayValue.length <= 9)
