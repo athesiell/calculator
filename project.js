@@ -52,7 +52,7 @@ function operate(operator, num1, num2) {
          makeSubtraction (num1, num2) 
     } else if (operator === "/") {
          makeDivision (num1, num2)
-    }
+    } 
     updateDisplay()
 }
 
@@ -75,7 +75,7 @@ window.addEventListener('keydown', (e) => {
 
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
-        if (displayValue.length <= 9)
+        if (displayValue.length <= 9) 
         displayValue += button.textContent;
         updateDisplay()
     });
@@ -87,8 +87,10 @@ operatorButtons.forEach(button => {
             firstNumber = displayValue;
             currentOperator = button.textContent;
             displayValue = '';
+        } else if (secondNumber === "") {
+            currentOperator = button.textContent
         } else {
-            secondNumber = displayValue
+            secondNumber = displayValue;
             operate(currentOperator, firstNumber, secondNumber);
             firstNumber = displayValue;
             currentOperator = button.textContent;
